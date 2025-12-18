@@ -1,0 +1,52 @@
+SAN조닝 기본
+
+cfgshow << 조닝정보확인
+
+기존 조닝 제거
+
+cfgremove "cfg_DE4000H_R330", "P0_IBM_DE4000H_FC1__P34_DELL_R330_FC1"
+cfgremove "cfg_DE4000H_R330", "P0_IBM_DE4000H_FC1__P35_DELL_R330_FC2"
+cfgremove "cfg_DE4000H_R330", "P1_IBM_DE4000H_FC2__P34_DELL_R330_FC1"
+cfgremove "cfg_DE4000H_R330", "P1_IBM_DE4000H_FC2__P35_DELL_R330_FC2"
+
+zonedelete "P0_IBM_DE4000H_FC1__P34_DELL_R330_FC1"
+zonedelete "P0_IBM_DE4000H_FC1__P35_DELL_R330_FC2"
+zonedelete "P1_IBM_DE4000H_FC2__P34_DELL_R330_FC1"
+zonedelete "P1_IBM_DE4000H_FC2__P35_DELL_R330_FC2"
+
+cfgenable "cfg_DE4000H_R330" <<설정 적용
+
+multipath -f mpathf << 서버 적용
+
+cat /sys/class/fc_host/host*/port_name  <<서버WWPN확인
+nsshow <<스토리지WWPN확인
+
+alias 생성
+
+alicreate "R330_FC1","10:00:00:00:c9:a2:5d:56"
+alicreate "R330_FC2","10:00:00:00:c9:a2:5d:57"
+
+alicreate "DE4000_P0","20:32:00:a0:98:e6:a3:a0"
+alicreate "DE4000_P1","20:32:00:a0:98:e6:a3:a1"
+
+zone 생성
+
+zonecreate "Z_R330_FC1_DE4000_P0","R330_FC1;DE4000_P0"
+zonecreate "Z_R330_FC2_DE4000_P1","R330_FC2;DE4000_P1"
+
+cfg에 zone 추가
+
+cfgadd "cfg_DE4000H_R330","Z_R330_FC1_DE4000_P0"
+cfgadd "cfg_DE4000H_R330","Z_R330_FC2_DE4000_P1"
+
+cfgenable "cfg_DE4000H_R330"
+
+cfg생성
+
+cfgcreate "cfg_R330_DE4000_PROD"
+cfgenable "cfg_R330_DE4000_PROD"
+
+
+
+
+
