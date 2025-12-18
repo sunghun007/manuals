@@ -1,0 +1,47 @@
+yum -y install gcc gcc-c++ make binutils libtool autoconf automake patch pkgconfig redhat-rpm-config gettext
+
+yum -y install epel-release
+
+yum -y install kernel-devel-$(uname -r) kernel-headers-$(uname -r) dkms
+
+cat <<HERE > /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
+blacklist nouveau
+options nouveau modeset=0
+HERE
+
+cd /boot
+
+mv initramfs-$(uname -r).img{,_backup}
+
+dracut
+
+ls initramfs-$(uname -r).img
+
+init 6 재부팅
+
+lsmod | grep nouveau ->출력이안되야함
+
+systemctl isolate multi-user.target
+
+yum -y update gdm
+
+yum install -y wget
+
+chmod +x NVIDIA-Linux-x86_64-460.73.01.run  드라이버파일 권한부여
+
+./NVIDIA-Linux-x86_64-460.73.01.run  실행
+
+
+
+
+
+
+
+lshw -numeric -C display << 모델확인
+
+https://www.nvidia.com/Download/Find.aspx?lang=en-us&ncid=afm-chs-44270&ranMID=44270&ranEAID=je6NUbpObpQ&ranSiteID=je6NUbpObpQ-LfPJ8WwMbDeqgpvmzY9FJg
+
+https://us.download.nvidia.com/XFree86/Linux-x86_64/515.105.01/NVIDIA-Linux-x86_64-515.105.01.run
+
+
+yum -y install kernel-devel-5.4.249-1.e17.x86_64

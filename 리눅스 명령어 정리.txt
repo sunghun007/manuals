@@ -1,0 +1,109 @@
+1~10위: 매일 수십 번 쓰는 명령어
+
+ls – 파일/디렉토리 목록 확인
+
+cd – 디렉토리 이동
+
+vim / nano – 설정 파일 편집
+
+cat / less / tail -f – 로그 및 파일 확인
+
+grep – 로그/설정 파일에서 문자열 검색
+
+ps aux / top / htop – 프로세스 상태 확인
+
+systemctl – 서비스 시작/중지/상태 확인
+
+journalctl – 시스템 로그 확인
+
+df -h – 디스크 용량 확인
+
+du -sh – 디렉토리 용량 확인
+
+🔥 11~20위: 장애 대응 시 많이 쓰는 명령어
+
+ping / nc / telnet – 네트워크 연결 테스트
+
+curl / wget – API 호출, 다운로드
+
+netstat / ss – 포트 및 네트워크 연결 확인
+
+free -h – 메모리 사용량
+
+uptime – 부하(load average) 확인
+
+kill / kill -9 – 프로세스 종료
+
+chmod / chown – 권한 문제 해결
+
+mount / umount – 저장장치 연결
+
+fdisk / lsblk / blkid – 디스크 파티션 상태
+
+ip addr / ip route – IP, 라우팅 확인
+
+🔥 21~30위: 운영/자동화에서 자주 씀
+
+scp / rsync – 서버 간 파일 전송
+
+ssh – 원격 접속
+
+cron / crontab -e – 자동 작업 설정
+
+tar / zip / unzip – 압축 및 백업
+
+docker / docker-compose – 컨테이너 관리
+
+kubectl – K8s 운영 시 필수
+
+git – 소스 버전 관리
+
+env / export – 환경변수 확인/추가
+
+history – 이전 명령어 기록
+
+top / nvidia-smi – GPU 서버에서 GPU 상태 확인
+
+🔥 31~40위: 문제 해결/리소스 체크
+
+find – 특정 조건으로 파일 검색
+
+awk / sed – 텍스트 가공
+
+dmesg – 커널 로그 확인
+
+service – 구버전 서비스 제어
+
+hostnamectl – 서버 이름 확인/변경
+
+timedatectl – 시간 설정
+
+ntpq / chronyc – 시간 동기화 확인
+
+iptables / ufw – 방화벽 관리
+
+who / w – 접속 사용자 확인
+
+lsof – 어떤 프로세스가 어떤 파일/포트 열었는지 확인
+
+🔥 41~50위: 고급 운영자용
+
+ss -lntp – 열려 있는 포트 상세 정보
+
+strace – 프로세스 시스템콜 분석
+
+tcpdump – 패킷 캡처
+
+journalctl -u <service> -f – 특정 서비스 실시간 로그
+
+alias – 자주 쓰는 명령 단축
+
+useradd / passwd – 사용자 생성/관리
+
+groupadd / usermod – 그룹 관리
+
+systemd-analyze – 부팅 속도 분석
+
+nmcli – 네트워크 설정(CentOS/NetworkManager)
+
+dpkg / rpm / apt / yum – 패키지 설치/삭제

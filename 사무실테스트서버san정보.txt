@@ -1,0 +1,27 @@
+[최재성] [오후 12:16] DE4000H 접속정보
+
+REMOTE IP : 192.168.150.130
+ID : admin
+PW : Password!23
+
+입니다.
+[최재성] [오후 12:16] DELL R330 접속 정보 (RHEL 7.9)
+
+IP : 192.168.150.131 (ssh 22)
+ID : admin (root)
+PW : 123qwe!@# (root 동일)
+
+입니다.
+[최재성] [오후 12:16] SAN 접속 정보
+
+TestSAN#0
+IP : 192.168.43.251
+ID : admin
+PW : password
+
+TestSAN#1
+IP : 192.168.43.252
+ID : admin
+PW : password
+
+입니다.

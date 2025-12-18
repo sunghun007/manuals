@@ -1,0 +1,26 @@
+록키 8.x 고정ip 설정 파일
+
+/etc/sysconfig/network-scripts/
+
+고정ip 예
+
+TYPE=Ethernet
+BOOTPROTO=none
+NAME=eno1
+DEVICE=eno1
+ONBOOT=yes
+
+IPADDR=192.168.150.131
+PREFIX=24
+GATEWAY=192.168.150.1
+DNS1=8.8.8.8
+DNS2=1.1.1.1
+
+dhcp 예
+
+TYPE=Ethernet
+BOOTPROTO=dhcp
+NAME=eno1
+DEVICE=eno1
+ONBOOT=yes
+

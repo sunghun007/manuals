@@ -1,0 +1,10 @@
+***우분투 센서 온도 확인 방법
+
+
+sudo apt install lm-sensors psensor (패키지설치)
+
+sudo sensors-detect (센서 찾기)
+
+sensors (실행 명령어)
+
+watch -n 1 sensors (1초당 센서 확인 명령어)

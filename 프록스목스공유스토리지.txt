@@ -1,0 +1,16 @@
+프록스목스 공유 스토리지
+
+/mnt/pve/aa
+
+nano /etc/exports
+
+/mnt/nfs_share  *(rw,sync,no_subtree_check,no_root_squash)
+
+sudo exportfs -ra
+sudo systemctl restart nfs-kernel-server
+
+sudo chmod 777 /mnt/nfs_share
+
+
+
+100300245

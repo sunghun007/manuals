@@ -1,0 +1,39 @@
+--서버
+
+sudo apt update
+sudo apt install nfs-kernel-server -y
+
+mkdir -p /srv/nfs_share
+sudo chmod 777 /data
+
+sudo vim /etc/exports
+
+마지막줄에
+/srv/nfs_share   192.168.0.0(rw,sync,no_subtree_check)
+                     클라이언트ip
+
+
+sudo exportfs -ra
+sudo systemctl restart nfs-kernel-server
+
+--클라이언트
+
+
+sudo apt update
+sudo apt install nfs-common -y
+
+sudo mount -t nfs4 10.10.10.50:/data /data
+
+df -h | grep nfs
+ls /mnt/nfs_share
+
+--자동 마운트
+
+sudo vim /etc/fstab
+
+10.10.10.50:/data   /data   nfs4    defaults,_netdev,nofail   0   0
+
+sudo mount -a
+
+
+

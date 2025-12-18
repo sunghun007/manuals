@@ -1,0 +1,33 @@
+서브스크립션없이 nvidia 드라이버 올리기
+
+sudo dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+
+sudo dnf install -y gcc gcc-c++ make binutils libtool autoconf automake patch pkgconfig redhat-rpm-config gettext
+
+sudo dnf install -y kernel-devel-$(uname -r) kernel-headers-$(uname -r) dkms
+
+cat <<HERE > /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
+blacklist nouveau
+options nouveau modeset=0
+HERE
+
+cd /boot
+
+mv initramfs-$(uname -r).img{,_backup}
+
+dracut
+
+ls initramfs-$(uname -r).img
+
+init 6 재부팅
+
+lsmod | grep nouveau ->출력이안되야함
+
+systemctl isolate multi-user.target
+
+sudo dnf install -y wget
+
+chmod +x NVIDIA-Linux-x86_64-460.73.01.run  드라이버파일 권한부여
+
+sudo ./NVIDIA-Linux-x86_64-460.73.01.run  실행
+

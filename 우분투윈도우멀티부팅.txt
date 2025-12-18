@@ -1,0 +1,43 @@
+###각각 디스크에 우분투, 윈도우 설치...설치시 디스크 분리하기
+
+바이오스에서 우분투 디스크 우선순위로 설정
+
+##우분투 부팅후 grub 활설화
+
+vim /etc/default/grub
+
+GRUB_TIMEOUT_STYLE=menu
+
+GRUB_TIMEOUT=10 
+
+GRUB_TERMINAL=console #이부분도 추가
+
+sudo update-grub
+
+##재부팅후 윈도우 디스크 찾아서 gurb 업데이트
+
+1. sudo os-prober
+
+윈도우 부트 매니저 감지
+
+ 
+
+2. sudo update-grub
+
+일단 한번 업데이트 해주고 만약 여기서 윈도우가 감지되지 않았다면
+
+Warning: os-prober will not be executed to detct other bootable partitions ..... 가 나오면
+
+ 
+
+3. sudo vi /etc/default/grub
+
+에 들어가서
+
+GRUB_DISABLE_OS_PROBER="false" 추가
+
+ 
+
+4. sudo update-grub
+
+Found windows boot manager on /dev/nvme1n1p1@....... 이 나오면 성공

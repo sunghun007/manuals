@@ -1,0 +1,464 @@
+1.먼지설치
+
+/etc/hosts ****** 각서버에 ip주소 호스트네임 등록 하기 ( 192.0.0.0 hostname)
+
+$ export MUNGEUSER=991
+$ sudo groupadd -g $MUNGEUSER munge
+$ sudo useradd  -m -c "MUNGE Uid 'N' Gid Emporium" -d /var/lib/munge -u $MUNGEUSER -g munge  -s /sbin/nologin munge
+
+sudo apt install munge -y
+
+
+***마스터노드
+$ sudo dd if=/dev/urandom of=/etc/munge/munge.key bs=1c count=4M
+$ sudo ls -l /etc/munge/munge.key
+$ sudo chmod a-r /etc/munge/munge.key
+$ sudo chmod u-w /etc/munge/munge.key 
+$ sudo chmod u+r /etc/munge/munge.key
+$ sudo chown munge:munge /etc/munge/munge.key
+$ sudo munge -n
+$ sudo munge -n | unmunge
+$ sudo scp /etc/munge/munge.key root@192.168.1.234:/etc/munge
+$ sudo systemctl enable munge
+$ sudo /etc/init.d/munge restart
+sudo chown munge:munge /etc/munge/munge.key
+sudo chmod 400 /etc/munge/munge.key
+
+***클라이언트
+$ sudo ls -l /etc/munge/munge.key
+$ sudo chmod a-r /etc/munge/munge.key
+$ sudo chmod u-w /etc/munge/munge.key 
+$ sudo chmod u+r /etc/munge/munge.key
+$ sudo chown munge:munge /etc/munge/munge.key
+$ sudo systemctl enable munge
+$ sudo /etc/init.d/munge restart
+
+munge -n | ssh node1 unmunge  (success 떠야함)
+
+2.슬럼설치
+
+###의존성 패키지 설치
+
+sudo apt install make gcc -y
+sudo apt install bzip2 -y
+
+sudo apt-get install -y build-essential libssl-dev libmysqlclient-dev libpam0g-dev libnuma-dev libhwloc-dev libreadline-dev libncurses-dev libmunge-dev libmunge2 libcurl4-openssl-dev libjson-c-dev man2html
+
+
+sudo wget https://download.schedmd.com/slurm/slurm-24.11.1.tar.bz2
+sudo tar -xf slurm-23.02.4.tar.bz2
+cd slurm-23.02.4
+sudo ./configure --prefix=/etc/slurm (prefix에 원하는 경로 지정)
+sudo make
+sudo make install
+
+####slurm 유저 생성
+
+sudo groupadd slurm
+sudo useradd -r -m -g slurm slurm
+
+#### slurmctld.service , slurmd.service 생성
+
+/etc/systemd/system/slurmctld.service
+예)
+[Unit]
+Description=Slurmctld Daemon
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/local/sbin/slurmctld
+ExecReload=/bin/kill -HUP $MAINPID
+PIDFile=/var/run/slurmctld.pid
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
+
+/etc/systemd/system/slurmd.service
+예)
+[Unit]
+Description=Slurm Daemon
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/local/sbin/slurmd
+ExecReload=/bin/kill -HUP $MAINPID
+PIDFile=/var/run/slurmd.pid
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
+
+###환경변수변경
+
+echo 'export PATH=/etc/slurm/bin:$PATH' | sudo tee -a /etc/profile
+echo 'export LD_LIBRARY_PATH=/etc/slurm/lib:$LD_LIBRARY_PATH' | sudo tee -a /etc/profile
+source /etc/profile
+
+###설정파일 카피
+
+sudo mkdir -p /etc/slurm/etc
+sudo cp /etc/slurm-llnl.bak/* /usr/local/slurm/etc/
+
+sudo mkdir -p /var/spool/slurmctld
+sudo mkdir -p /var/spool/slurmd
+sudo mkdir -p /var/spool/slurm
+
+/etc/slurm/cgroup.conf ****파일 꼭 생성 하기
+
+3.시간동기화
+
+sudo apt-get install -y ntp
+sudo vim /etc/ntp.conf
+pool 모두 주석처리
+server 192.168.1.252 iburst  (내부 ntp서버 ip주소 입력)
+sudo systemctl enable ntp
+sudo systemctl start ntp
+
+***** scp 안먹힐때
+
+sudo ssh-keygen -f "/home/user/.ssh/known_hosts" -R "node1"
+
+***** slurm 제거
+
+cp /etc/slurm/*.* (경로지정)    (기존 설정파일 백업)
+sudo systemctl stop slurmctld slurmd
+sudo apt-get remove --purge *slurm* -y
+
+***slurm 디버깅모드 실행
+
+sudo /etc/slurm/sbin/slurmd -D -v
+
+***slurm cgroup 플러그인 설치
+
+sudo apt-get install libcgroup-dev cgroup-tools -y
+mount | grep cgroup
+
+***cgroup v1 활성화
+
+/etc/default/grub 파일에서 GRUB_CMDLINE_LINUX에 systemd.unified_cgroup_hierarchy=0 추가.
+update-grub
+재부팅
+
+***slurm 폴더 권한 설정
+
+sudo chown -R slurm:slurm /var/spool/slurmctld
+sudo chown -R slurm:slurm /var/spool/slurmd
+
+*** 파일 권한 설정
+
+sudo chmod 644 /var/run/slurmctld.pid
+sudo chmod 644 /var/log/slurmctld.log 등등
+
+*** 방화벽제거
+
+sudo ufw allow from 192.168.1.252/24  (해당 아이피 모든 포트 개방)
+
+
+*** 작업명령 샘플
+
+srun --ntasks=1 --cpus-per-task=1 --mem=1G --time=00:05:00 --partition=debug bash -c "echo 'Hello from Slurm\!'"
+
+*** gpu burn 스냅 설치
+
+sudo snap install gpu-burn
+
+
+*** 노드상태확인
+
+scontrol show node
+scontrol update nodename=node1 state=resume
+
+*** 호스트네임 변경
+
+sudo hostnamectl set-hostname newhostname
+
+***슬럼유저 설정 방법
+
+sudo usermod -aG slurm user1
+
+***공유 작업폴더 생성
+
+NFS 서버 설정(마스터 노드):
+
+sudo apt install nfs-kernel-server
+sudo mkdir -p /shared/data
+sudo chown -R nobody:nogroup /shared/data
+sudo chmod 777 /shared/data
+sudo echo "/shared/data *(rw,sync,no_subtree_check)" >> /etc/exports
+sudo exportfs -a
+sudo systemctl restart nfs-kernel-server
+
+NFS 클라이언트 설정(계산 노드):
+
+sudo apt install nfs-common
+sudo mkdir -p /shared/data
+sudo mount 192.168.1.229:/shared/data /shared/data
+
+***두개의 노드에서 nvidia-smi
+
+srun -N 2 --ntasks=2 --gres=gpu:1 bash -c 'hostname && nvidia-smi'
+
+***로그파일 실시간 확인
+
+tail -f output.log
+
+****슬럼 Accounting(회계) 기능 사용을 위한 mariaDB 세팅 (선택)
+
+마스터노드에 설치
+
+sudo apt install -y mariadb-server mariadb-client libmariadb-dev-compat
+sudo mysql_secure_installation
+
+처음 루트 패스워드를 입력한다. 처음이므로 엔터를 입력 “Enter current password for root (enter for none): “
+Root password를 변경할 예정이므로 unix_socket authenication을 사용하지 않는다. “Switch to unix_socket authentication [Y/n] n”
+새로운 root password를 설정한다. “Change the root password? [Y/n] y”
+익명 유저 로그인을 막았다. “Remove anonymous users? [Y/n] y”
+보안을 위해 root login을 remote에서 하는걸 막는다. “Disallow root login remotely? [Y/n] n”
+test database를 제거한다. “Remove test database and access to it? [Y/n] y”
+지금까지 설정한것을 반영하기 위해 privilege table를 reload한다. “Reload privilege tables now? [Y/n] y”
+
+sudo mysql -u root -p
+MariaDB [(none)]>
+CREATE DATABASE slurm_acct_db;
+CREATE USER 'slurm'@'localhost' IDENTIFIED BY '1q@';
+GRANT ALL PRIVILEGES ON slurm_acct_db.* TO `slurm`@`localhost`;
+FLUSH PRIVILEGES;
+EXIT;
+
+slurmbdb.conf 생성및 입력
+
+sudo chown slurm:slurm /etc/slurm/etc/slurmdbd.conf
+sudo chmod 600 /etc/slurm/etc/slurmdbd.conf
+
+마스터노드 slurm.conf 에 입력
+
+AccountingStorageType=accounting_storage/slurmdbd
+AccountingStorageHost=localhost
+AccountingStorageUser=slurm
+
+echo 'export PATH=/etc/slurm/sbin:$PATH' | sudo tee -a /etc/profile
+source ~/.bashrc
+
+/etc/systemd/system/slurmdbd.service 등록
+
+[Unit]
+Description=Slurm DBD Daemon
+After=network.target mariadb.service
+Requires=mariadb.service
+
+[Service]
+Type=simple
+ExecStart=/etc/slurm/sbin/slurmdbd -D
+User=slurm
+Group=slurm
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+my.cnf 파일 수정
+
+[mysqld]
+innodb_buffer_pool_size=4096M
+innodb_log_file_size=64M
+innodb_lock_wait_timeout=900
+max_allowed_packet=16M
+
+sacctmgr show cluster
+
+작업완료후 회계기능 사용
+sacct -u root --format=JobID,JobName,Partition,Account,AllocCPUs,State,ExitCode,MaxRSS,TotalCPU
+
+*** 로그파일 실시간 확인
+
+tail -f
+
+
+*************** 슬럼과 그라파나 연동 작업 (선택)
+
+sudo apt-get install prometheus prometheus-node-exporter -y
+sudo systemctl start prometheus
+sudo systemctl enable prometheus
+systemctl status prometheus
+
+git clone https://github.com/vpenso/prometheus-slurm-exporter.git
+sudo apt install golang-go -y
+make
+
+cd ~/down/prometheus-slurm-exporter
+nohup ./bin/prometheus-slurm-exporter &
+
+prometheus.yml 파일 수정
+
+scrape_configs:
+  - job_name: 'slurm'
+    static_configs:
+      - targets: ['192.168.1.229:8080']
+
+파일수정후 서비스 재시작
+systemctl restart prometheus
+
+http://192.168.1.229:9090/classic/targets 접속후 slurm state up 확인
+
+그라파나 설치
+
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://apt.grafana.com/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/grafana.gpg
+echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" | sudo tee /etc/apt/sources.list.d/grafana.list
+sudo apt update
+sudo apt install grafana -y
+systemctl enable --now grafana-server
+
+http://192.168.1.229:3000/login 접속 확인
+초기암호 admin // admin
+
+✅ 1. Prometheus를 Grafana 데이터 소스로 추가
+Grafana 웹 UI 접속 → http://서버IP:3000
+
+왼쪽 사이드바 → "커넥션" → "Data sources"
+
+"Add data source" 클릭
+
+Prometheus 선택
+
+URL 입력:
+
+http
+복사
+편집
+http://localhost:9090
+"Save & test" 클릭 → 연결 성공 메시지가 나오면 완료
+
+ 2. Slurm 대시보드 가져오기
+Grafana 커뮤니티에는 Slurm을 위한 대시보드가 등록되어 있습니다.
+
+왼쪽 메뉴 → 📊 "Dashboards" → "Import"
+
+아래 중 하나 입력:
+
+추천 Slurm 대시보드 ID:
+
+복사
+편집
+12239
+또는 최신 대시보드 검색 시:
+
+https://grafana.com/grafana/dashboards 에서 slurm 검색
+
+Load 클릭
+
+Prometheus 데이터 소스 선택
+
+Import 클릭
+
+ Grafana에 Slurm 대시보드 추가 방법
+Grafana 로그인: 웹 브라우저에서 Grafana에 로그인합니다.
+
+대시보드 가져오기:
+
+왼쪽 사이드바에서 "+" 아이콘을 클릭한 후 "Import"를 선택합니다.
+
+추천한 대시보드의 ID를 "Grafana.com Dashboard" 필드에 입력하고 "Load"를 클릭합니다.
+
+데이터 소스 설정:
+
+"Prometheus" 데이터 소스를 선택합니다.
+
+대시보드 가져오기 완료:
+
+"Import"를 클릭하여 대시보드를 가져옵니다.
+
+##### 그라파나에 GPU 대시보드 추가
+
+각노드에 DCGM 설치
+
+$ wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-keyring_1.0-1_all.deb
+$ sudo dpkg -i cuda-keyring_1.0-1_all.deb
+$ sudo add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/ /"
+
+$ sudo apt-get update
+  sudo apt-get install -y datacenter-gpu-manager
+sudo systemctl --now enable nvidia-dcgm
+
+DCGM Exporter 설치
+
+apt install -y docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+apt install -y nvidia-container-toolkit
+sudo nvidia-ctk runtime configure --runtime=docker
+sudo systemctl restart docker
+
+docker run --gpus all -d --cap-add SYS_ADMIN -p 9400:9400 nvcr.io/nvidia/k8s/dcgm-exporter:4.1.1-4.0.4-ubuntu22.04 또는
+docker run --gpus all -d --cap-add SYS_ADMIN --restart=always -p 9400:9400 \
+  nvcr.io/nvidia/k8s/dcgm-exporter:4.1.1-4.0.4-ubuntu22.04 (재부팅시 자동 시작)
+
+
+prometheus.yml 파일 수정
+
+scrape_configs:
+  - job_name: 'dcgm-exporter'
+    static_configs:
+      - targets: ['192.168.1.228:9400', '192.168.1.229:9400']
+
+systemctl restart prometheus
+
+그라파나에서 DCGM 메트릭스 중 gpu_utilization이나 gpu_memory_usage 등을 시각화
+기본 NVIDIA DCGM 대시보드 가져오기
+https://grafana.com/grafana/dashboards/?search=nvidia
+접속해서 맘에 드는것 id 확인후 임포트
+기본 NVIDIA DCGM id 12239
+
+**** 두개의 노드에 gpu-burn 실행
+
+각노드에 snap install gpu-burn
+
+srun --nodelist=node1,node2 --ntasks=2 --exclusive gpu-burn 60
+
+
+**** 슬럼유저 등록 방법
+
+sudo adduser username
+sudo usermod -aG slurm username
+sudo passwd username
+
+sudo sacctmgr add account devaccount Description="Development Group" Organization="devorg" Cluster=cluster
+sudo sacctmgr add user username Account=devaccount DefaultAccount=devaccount Cluster=cluster
+
+sacctmgr show user username format=User,Account,DefaultAccount,Cluster 등록확인
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

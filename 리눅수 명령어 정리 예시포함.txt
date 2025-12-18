@@ -1,0 +1,199 @@
+1) ls
+   - 현재 디렉토리 파일 목록 보기
+   - 예: ls -al
+
+2) cd
+   - 디렉토리 이동
+   - 예: cd /var/log
+
+3) pwd
+   - 현재 경로 출력
+   - 예: pwd
+
+4) cp
+   - 파일/디렉토리 복사
+   - 예: cp file1.txt /backup/
+
+5) mv
+   - 파일/디렉토리 이동 또는 이름 변경
+   - 예: mv old.txt new.txt
+
+6) rm
+   - 파일 삭제
+   - 예: rm -f test.log
+
+7) mkdir
+   - 새 디렉토리 생성
+   - 예: mkdir /data/project
+
+8) rmdir
+   - 빈 디렉토리 삭제
+   - 예: rmdir old_folder
+
+9) touch
+   - 빈 파일 생성 또는 수정 시간 변경
+   - 예: touch test.txt
+
+10) cat
+    - 파일 내용 출력
+    - 예: cat /etc/hosts
+
+11) more
+    - 파일을 페이지 단위로 보기
+    - 예: more bigfile.txt
+
+12) less
+    - more의 업그레이드 버전(위/아래 스크롤)
+    - 예: less /var/log/syslog
+
+13) tail
+    - 파일 마지막 10줄 보기
+    - 예: tail -f /var/log/messages
+
+14) head
+    - 파일 첫 10줄 보기
+    - 예: head -n 20 test.log
+
+15) find
+    - 파일/폴더 검색
+    - 예: find / -name "*.log"
+
+16) grep
+    - 문자열 검색
+    - 예: grep "error" /var/log/syslog
+
+17) ps
+    - 실행 중인 프로세스 조회
+    - 예: ps aux | grep python
+
+18) top
+    - 실시간 CPU/메모리 모니터링
+    - 예: top
+
+19) htop
+    - top 개선버전(패키지 설치 필요)
+    - 예: htop
+
+20) du
+    - 디렉토리 용량 확인
+    - 예: du -sh /var/log
+
+21) df
+    - 디스크 용량 확인
+    - 예: df -h
+
+22) free
+    - 메모리 사용량 확인
+    - 예: free -h
+
+23) uname
+    - 시스템 정보 확인
+    - 예: uname -a
+
+24) who
+    - 현재 로그인 사용자 확인
+    - 예: who
+
+25) w
+    - 로그인 사용자 + 사용 패턴 확인
+    - 예: w
+
+26) ifconfig / ip
+    - 네트워크 인터페이스 정보 확인
+    - 예: ip addr show
+
+27) ping
+    - 네트워크 연결 테스트
+    - 예: ping 8.8.8.8
+
+28) netstat / ss
+    - 포트 상태 확인
+    - 예: ss -tulnp
+
+29) systemctl
+    - 서비스 시작/중지/상태 확인
+    - 예: systemctl status nginx
+
+30) service
+    - 구형 서비스 제어 명령
+    - 예: service ssh restart
+
+31) journalctl
+    - systemd 로그 조회
+    - 예: journalctl -u nginx -f
+
+32) chmod
+    - 파일 권한 변경
+    - 예: chmod 755 script.sh
+
+33) chown
+    - 파일 소유자 변경
+    - 예: chown root:root /etc/test.conf
+
+34) useradd
+    - 사용자 추가
+    - 예: useradd admin
+
+35) passwd
+    - 사용자 비밀번호 변경
+    - 예: passwd admin
+
+36) userdel
+    - 사용자 삭제
+    - 예: userdel admin
+
+37) groupadd
+    - 그룹 추가
+    - 예: groupadd devteam
+
+38) tar
+    - 압축/압축 해제
+    - 예: tar -czvf backup.tar.gz /data
+
+39) unzip
+    - zip 파일 해제
+    - 예: unzip file.zip
+
+40) wget
+    - 파일 다운로드
+    - 예: wget https://example.com/file.tar.gz
+
+41) curl
+    - URL 요청/확인
+    - 예: curl -I https://google.com
+
+42) ssh
+    - 원격 서버 접속
+    - 예: ssh root@192.168.0.10
+
+43) scp
+    - 서버 간 파일 복사
+    - 예: scp test.txt root@1.1.1.1:/root/
+
+44) rsync
+    - 고속 파일 동기화
+    - 예: rsync -av /data /backup
+
+45) mount
+    - 디스크 마운트
+    - 예: mount /dev/sdb1 /mnt
+
+46) umount
+    - 디스크 언마운트
+    - 예: umount /mnt
+
+47) crontab
+    - 스케줄 작업 등록
+    - 예: crontab -e
+
+48) dmesg
+    - 커널 메시지 확인(장애 분석)
+    - 예: dmesg | tail
+
+49) reboot
+    - 시스템 재부팅
+    - 예: reboot
+
+50) shutdown
+    - 시스템 종료
+    - 예: shutdown -h now

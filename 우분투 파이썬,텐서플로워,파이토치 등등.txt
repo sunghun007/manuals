@@ -1,0 +1,62 @@
+Nvidia드라이버 설치
+
+# apt install gcc -y
+# apt install make -y
+# apt-get install build-essential gcc-multilib dkms -y
+
+https://developer.nvidia.com/cuda-toolkit-archive 접속후 툴킷 버젼 다운
+
+쿠다 설치
+
+
+# sh -c "echo 'export PATH=$PATH:/usr/local/cuda-12.4/bin' >> /etc/profile"
+# sh -c "echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-12.4/lib64' >> /etc/profile"
+# sh -c "echo 'export CUDADIR=/usr/local/cuda-12.4' >> /etc/profile"
+# source /etc/profile
+
+nvcc -V
+
+##tensorflow설치
+
+python3 -V
+
+sudo apt install python3-venv python3-dev -y
+mkdir tensorflow
+cd tensorflow
+python3 -m venv venv
+source venv/bin/activate
+pip install tensorflow
+pip install tensorflow-gpu
+python -c 'import tensorflow as tf; print(tf.__version__)'
+
+##아나콘다설치
+
+wget https://repo.anaconda.com/archive/Anaconda3-2024.10-1-Linux-x86_64.sh
+bash Anaconda3-2024.06-1-Linux-x86_64.sh
+
+source ~/.bashrc
+conda --version
+
+##pytorch설치
+
+conda create -n torch
+conda activate torch
+conda install pytorch torchvision torchaudio pytorch-cuda=12.4 -c pytorch -c nvidia
+python
+import torch
+torch.cuda.is_available()
+
+변환값 true 완료
+
+conda deactivate
+
+
+### jupyter notebook
+
+jupyter notebook password
+jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root
+
+
+
+
+

@@ -1,0 +1,20 @@
+여러개의 LUN 통으로 묶기 LVM
+
+멀티패스 설치후
+
+pvcreate /dev/mapper/mpathb
+pvcreate /dev/mapper/mpathc
+pvcreate /dev/mapper/mpathd
+
+또는
+pvcreate /dev/mapper/mpath*
+
+vgcreate VG_SAN \
+  /dev/mapper/mpathb \
+  /dev/mapper/mpathc \
+  /dev/mapper/mpathd
+
+또는
+vgcreate /dev/mapper/mpath*
+
+lvcreate -n LV_DATA -l 100%FREE VG_SAN

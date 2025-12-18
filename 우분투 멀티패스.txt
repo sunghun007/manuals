@@ -1,0 +1,42 @@
+apt update
+apt install -y multipath-tools xfsprogs
+multipath -v
+
+systemctl enable multipathd
+systemctl start multipathd
+systemctl status multipathd
+
+vim /etc/multipath.conf
+
+defaults {
+    user_friendly_names yes
+    find_multipaths yes
+}
+
+blacklist {
+    devnode "^sda"    # OS 디스크 제외 (매우 중요)
+}
+
+devices {
+    device {
+        vendor "LENOVO"
+        product "DE_Series"
+        path_grouping_policy group_by_prio
+        path_checker tur
+        prio alua
+        failback immediate
+        no_path_retry queue
+    }
+}
+
+systemctl restart multipathd
+multipath -v2
+multipath -ll
+
+iscsi 재검색
+
+for host in /sys/class/scsi_host/host*; do
+  echo "- - -" > $host/scan
+done
+
+

@@ -1,0 +1,5 @@
+https://velog.io/@gclee/CentOS-7-ElasticSearch-%EC%84%A4%EC%B9%98
+
+
+https://velog.io/@gclee/CentOS-7-Kibana-%EC%84%A4%EC%B9%98
+

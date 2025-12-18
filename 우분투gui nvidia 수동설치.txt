@@ -1,0 +1,17 @@
+sudo dpkg -i *.deb
+sudo apt --fix-broken install
+
+touch /etc/modprobe.d/disable-nouveau.conf
+nano /etc/modprobe.d/disable-nouveau.conf
+
+blacklist nouveau
+options nouveau modeset=0
+
+sudo update-initramfs -u
+init 6
+
+lsmod | grep nouveau
+sudo systemctl stop gdm
+
+sh NVIDIA~~
+or ./N~~
