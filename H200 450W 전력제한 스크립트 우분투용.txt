@@ -1,0 +1,51 @@
+touch /etc/systemd/system/nvidia-powerlimit.service
+
+vim /etc/systemd/system/nvidia-powerlimit.service
+
+[Unit]
+Description=Set NVIDIA GPU Power Limit
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/set_gpu_power.sh
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
+
+
+touch /usr/local/bin/set_gpu_power.sh
+
+vim /usr/local/bin/set_gpu_power.sh
+
+#!/bin/bash
+# 모든 GPU Persistence Mode 활성화
+for i in $(nvidia-smi --query-gpu=index --format=csv,noheader); do
+    /usr/bin/nvidia-smi -i $i -pm 1
+    /usr/bin/nvidia-smi -i $i -pl 450
+done
+
+sudo chmod +x /usr/local/bin/set_gpu_power.sh
+
+sudo systemctl enable nvidia-powerlimit.service
+
+sudo systemctl start nvidia-powerlimit.service
+
+nvidia-smi -q -d POWER | grep "Power Limit"
+
+
+####특정 gpu 만 전력 제한
+
+#!/bin/bash
+# 모든 GPU의 Persistence Mode 활성화
+for i in $(nvidia-smi --query-gpu=index --format=csv,noheader); do
+    /usr/bin/nvidia-smi -i $i -pm 1
+done
+
+# GPU 2번과 3번만 전력 제한 450W로 설정
+for i in 2 3; do
+    /usr/bin/nvidia-smi -i $i -pl 450
+done
+
+

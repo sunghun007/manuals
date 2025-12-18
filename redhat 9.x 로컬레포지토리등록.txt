@@ -1,0 +1,19 @@
+mount /dev/sr0 /mnt
+cd /etc/yum.repos.d
+touch /etc/yum.repos.d/loacl.repo
+vim /etc/yum.repos.d/loacl.repo
+
+[rhel-BaseOS]
+name=RHEL_9.5_BaseOS
+baseurl=file:///mnt/BaseOS/
+gpgcheck=0
+Enabled=1
+
+[rhel-AppStream]
+name=RHEL_9.5_AppStream
+baseurl=file:///mnt/AppStream/
+gpgcheck=0
+Enabled=1
+
+sudo dnf clean all
+sudo dnf repolist

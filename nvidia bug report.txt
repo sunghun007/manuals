@@ -1,0 +1,5 @@
+nvidia 드라이버 설치후
+
+sudo nvidia-bug-report.sh
+
+실행하면 현재 폴더에 gz 파일이 생성됨

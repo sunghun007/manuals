@@ -1,0 +1,20 @@
+fdisk /dev/sdb
+
+parted /dev/sdb
+
+mklabel gpt
+mkpart primary 0% 100%
+set 1 lvm on
+quit
+
+기본 통으로
+
+pvcreate /dev/sdb1
+vgcreate vg_data /dev/sdb1
+lvcreate -l 100%FREE -n lv_data vg_data
+
+분할 생성
+
+lvcreate -L 10G -n lv_data2 vg_data
+
+

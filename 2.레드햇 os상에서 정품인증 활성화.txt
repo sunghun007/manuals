@@ -1,0 +1,5 @@
+OS상에서 해당 명령어로 활성화 시킵니다
+
+# subscription-manager register --username <username> --password <password> --auto-attach
+
+username과 password 는 redhat 계정을 넣으면 됩니다.
