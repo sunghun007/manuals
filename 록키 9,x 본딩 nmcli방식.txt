@@ -25,4 +25,6 @@ nmcli connection up bond0
 nmcli device status
 ip addr show bond0
 
+적용안될시 재부팅
+
 
