@@ -1,0 +1,28 @@
+록키 9,x 본딩 nmcli방식
+
+nmcli connection add type bond con-name bond0 ifname bond0 mode active-backup
+nmcli connection add type ethernet con-name bond0-eno1 ifname eno1 master bond0
+nmcli connection add type ethernet con-name bond0-eno2 ifname eno2 master bond0
+
+# 1. connection 이름 확인
+nmcli connection show
+
+# 2. 기존 IP 초기화
+nmcli connection modify bond0 ipv4.addresses ""
+
+# 3. 새 IP 설정
+nmcli connection modify bond0 
+  ipv4.method manual 
+  ipv4.addresses 192.168.150.200/24 
+  ipv4.gateway 192.168.150.1
+  ipv4.dns "8.8.8.8 1.1.1.1"
+
+# 4. 적용
+nmcli connection down bond0
+nmcli connection up bond0
+
+# 5. 확인
+nmcli device status
+ip addr show bond0
+
+

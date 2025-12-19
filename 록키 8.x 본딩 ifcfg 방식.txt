@@ -1,0 +1,53 @@
+록키 8.x 본딩 ifcfg 방식
+
+ip link
+
+systemctl enable --now NetworkManager
+
+[root@localhost network-scripts]# cat ifcfg-eno1
+TYPE=Ethernet
+NAME=eno1
+DEVICE=eno1
+ONBOOT=yes
+
+BOOTPROTO=none
+MASTER=bond0
+SLAVE=yes
+
+[root@localhost network-scripts]# cat ifcfg-eno2
+TYPE=Ethernet
+NAME=eno2
+DEVICE=eno2
+ONBOOT=yes
+
+BOOTPROTO=none
+MASTER=bond0
+SLAVE=yes
+
+[root@localhost network-scripts]# cat ifcfg-bond0
+TYPE=Bond
+NAME=bond0
+DEVICE=bond0
+ONBOOT=yes
+BOOTPROTO=none
+
+IPADDR=192.168.150.133
+PREFIX=24
+GATEWAY=192.168.150.1
+DNS1=8.8.8.8
+
+BONDING_MASTER=yes
+BONDING_OPTS="mode=1 miimon=100 primary=eno1"
+
+[root@localhost network-scripts]#
+
+
+systemctl restart NetworkManager
+
+nmcli connection down bond0 && nmcli connection up bond0
+
+nmcli connection reload
+
+nmcli connection up bond0
+
+
