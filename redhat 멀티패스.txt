@@ -8,7 +8,15 @@ multipath -ll
 
 /etc/multipath.conf 열어서 
 
-ca                   <<확인
+defaults {
+    user_friendly_names yes
+    find_multipaths yes
+}
+
+blacklist {
+    devnode "^sd[a]$"
+}
+                   <<<<<<<<<<<<<확인
 
 적용후
 
@@ -29,4 +37,5 @@ multipath -v2
 multipath -ll
 
 mkfs.xfs /dev/mapper/mpathf1
+
 
