@@ -1,7 +1,7 @@
 mount /dev/sr0 /mnt
 cd /etc/yum.repos.d
-touch /etc/yum.repos.d/loacl.repo
-vim /etc/yum.repos.d/loacl.repo
+touch /etc/yum.repos.d/local.repo
+vim /etc/yum.repos.d/local.repo
 
 [rhel-BaseOS]
 name=RHEL_9.5_BaseOS
@@ -17,3 +17,30 @@ Enabled=1
 
 sudo dnf clean all
 sudo dnf repolist
+
+***재부팅해도 고정 로컬로 카피후 등록
+
+mkdir -p /repo
+mount /dev/sr1 /mnt
+cp -av /mnt/* /repo/
+umount /mnt
+rm -f /etc/yum.repos.d/*.repo
+vim /etc/yum.repos.d/local.repo
+
+[Local-BaseOS]
+name=Local BaseOS
+baseurl=file:///repo/BaseOS
+enabled=1
+gpgcheck=0
+
+[Local-AppStream]
+name=Local AppStream
+baseurl=file:///repo/AppStream
+enabled=1
+gpgcheck=0
+
+
+dnf clean all
+dnf repolist
+
+
