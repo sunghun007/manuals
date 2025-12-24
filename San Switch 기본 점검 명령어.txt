@@ -1,0 +1,54 @@
+San Switch 기본 점검 명령어
+
+psshow - 전원 공급 장치의 상태를 표시
+
+fansshow  - 팬의 상태를 표시
+
+tempshow - 온도 판독 값의 상태를 표시
+
+sensorshow - 센서 판독 값의 상태를 표시
+
+nsshow - 이름 서버에 정보를 표시
+
+nsshow -t - 이름 서버에 정보를 표시
+
+nsshow -r - 상태 변경 등록 정보와 함께 이름 서버에 정보를 표시
+
+nscamshow - 패브릭의 모든 스위치에 연결된 모든 장치의 상세 정보 표시 (원격 이름 서버)
+
+nsallshow - 패브릭에있는 모든 장치의 24 비트 주소를 표시
+
+licenseshow - 스위치에 추가 된 모든 라이센스를 표시
+
+date - 스위치에 설정된 현재 날짜를 표시
+
+bannershow - CLI 또는 웹 도구를 사용하여 로그인 할 때 나타나는 배너를 표시
+
+httpcfgshow -  스위치가 관리 콘솔에서 기대하는 JAVA 버전을 표시
+
+switchname - 스위치의 이름을 표시
+
+fabricshow - fabric에 있는 모든 스위치의 정보를 표시
+
+userconfig -show - -a 역할, 설명, 암호 만료 날짜, 잠긴 상태와 같은 계정 정보를 표시
+
+switchstatusshow - 스위치의 전체 상태를 표시
+
+switchstatuspolicyshow - 마진 (노란색) 또는 다운 (빨간색) 오류 상태와 관련된 스위치에 대한 정책 세트를 표시
+
+portshow - 포트 상태를 표시
+
+portcfgshow - 모든 슬롯의 모든 포트에 설정된 속도 및 기타 자세한 포트 정보를 표시
+
+configshow fabric.ops - 스위치의 매개 변수를 표시(패브릭의 모든 스위치가 통신하기 위해 동일한 매개 변수를 갖도록해야한다)
+
+configshow fabric.ops.pidFormat - 스위치 코어, 기본 또는 확장 에지에 대한 PID 세트를 표시
+
+switchuptime - 가동 시간 스위치의 가동 시간을 표시
+
+firmwareshow - 스위치에 펌웨어를 표시
+
+version - 스위치의 현재 펌웨어 버전을 표시
+
+hashow - 로컬 및 원격 CP의 상태를 표시(고 가용성, 하트 비트 및 동기화)
+
