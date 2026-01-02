@@ -1,6 +1,6 @@
 록키 9,x 본딩 nmcli방식
 
-nmcli connection add type bond con-name bond0 ifname bond0 mode active-backup
+nmcli connection add type bond con-name bond0 ifname bond0 mode "active-backup"
 nmcli connection add type ethernet con-name bond0-eno1 ifname eno1 master bond0
 nmcli connection add type ethernet con-name bond0-eno2 ifname eno2 master bond0
 
@@ -26,5 +26,6 @@ nmcli device status
 ip addr show bond0
 
 적용안될시 재부팅
+
 
 
