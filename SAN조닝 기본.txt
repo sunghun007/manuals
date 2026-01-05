@@ -46,6 +46,22 @@ cfg생성
 cfgcreate "cfg_R330_DE4000_PROD"
 cfgenable "cfg_R330_DE4000_PROD"
 
+#####권장 명칭
+
+alias
+H_<ServerName>_FC1
+H_<ServerName>_FC2
+S_<STORAGE>_A_P1
+S_<STORAGE>_B_P1
+
+zone
+Z_<ServerName>_FC1_<STORAGE>_P1
+Z_<ServerName>_FC2_<STORAGE>_P2
+
+
+
+
+
 
 
 
